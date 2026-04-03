@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16
+    container_name: pagevault_db
+    environment:
+      POSTGRES_DB: pagevault_db
+      POSTGRES_USER: pagevault_user
+      POSTGRES_PASSWORD: strong_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - pagevault-net
+
+  app:
+    build: .
+    container_name: pagevault_app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pagevault_db
+      SPRING_DATASOURCE_USERNAME: pagevault_user
+      SPRING_DATASOURCE_PASSWORD: strong_password
+    ports:
+      - "8080:8080"
+    networks:
+      - pagevault-net
+
+volumes:
+  pgdata:
+
+networks:
+  pagevault-net:
+    driver: bridge
+
