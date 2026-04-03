@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PageVault • Book Shop Inventory</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/pagevault.css}">
+
+    <style>
+        body {
+            background:
+                    radial-gradient(1200px 600px at 10% 0%, rgba(13,110,253,.22), transparent 55%),
+                    radial-gradient(900px 600px at 100% 10%, rgba(25,135,84,.18), transparent 55%),
+                    radial-gradient(900px 700px at 50% 110%, rgba(111,66,193,.18), transparent 55%),
+                    #0b1220;
+            color: #e9eef7;
+        }
+        .glass {
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.12);
+            backdrop-filter: blur(10px);
+        }
+        .hero {
+            padding: 5rem 0;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+            border: none;
+        }
+        .muted { color: rgba(233,238,247,.80); }
+        .stat {
+            border-left: 3px solid rgba(13,110,253,.55);
+            padding-left: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark py-3">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" th:href="@{/}">
+            <i class="bi bi-book-half me-2"></i>PageVault
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/books}"><i class="bi bi-grid me-1"></i>Catalog</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/orders/new}"><i class="bi bi-bag-check me-1"></i>Create Order</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/purchases}"><i class="bi bi-receipt me-1"></i>Purchases</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+            </ul>
+
+            <div class="d-flex gap-2 align-items-center">
+                <div class="small muted" th:if="${#authorization.expression('isAuthenticated()')}">
+                    Signed in as <span class="fw-semibold" th:text="${#authentication.name}">user</span>
+                </div>
+                <a class="btn btn-outline-light btn-sm" th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/me}">
+                    <i class="bi bi-person-circle me-1"></i>My Account
+                </a>
+                <a class="btn btn-outline-light btn-sm" th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">Login</a>
+                <a class="btn btn-primary btn-sm" th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/register}">Register</a>
+                <form th:if="${#authorization.expression('isAuthenticated()')}" th:action="@{/logout}" method="post" class="m-0">
+                    <button class="btn btn-primary btn-sm" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <div class="badge text-bg-primary bg-opacity-25 border border-primary border-opacity-25 mb-3">
+                    KUET • CSE 3220 • Book Shop Inventory System
+                </div>
+                <h1 class="display-5 fw-semibold lh-sm">Manage inventory, orders, and purchases — like an ecommerce store.</h1>
+                <p class="lead muted mt-3">
+                    PageVault helps you track books, stock, customer orders, and purchases with role-based access and secure login.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a class="btn btn-primary btn-lg" th:href="@{/books}">
+                        <i class="bi bi-grid me-2"></i>Browse Catalog
+                    </a>
+                    <a class="btn btn-outline-light btn-lg" th:href="@{/orders/new}">
+                        <i class="bi bi-bag-plus me-2"></i>Create an Order
+                    </a>
+                    <a class="btn btn-outline-light btn-lg" th:href="@{/purchases}">
+                        <i class="bi bi-receipt-cutoff me-2"></i>View Purchases
+                    </a>
+                </div>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-sm-4">
+                        <div class="glass rounded-4 p-3 stat">
+                            <div class="small muted">Inventory</div>
+                            <div class="fw-semibold">Books & stock</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="glass rounded-4 p-3 stat">
+                            <div class="small muted">Orders</div>
+                            <div class="fw-semibold">Pending → shipped</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="glass rounded-4 p-3 stat">
+                            <div class="small muted">Finance</div>
+                            <div class="fw-semibold">Purchases & totals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="glass rounded-4 p-4">
+                    <h2 class="h5 mb-3"><i class="bi bi-stars me-2"></i>Quick actions</h2>
+                    <div class="list-group list-group-flush">
+                        <a class="list-group-item list-group-item-action bg-transparent text-white border-opacity-10" th:href="@{/books}">
+                            <i class="bi bi-search me-2"></i>Search books by title/author
+                        </a>
+                        <a class="list-group-item list-group-item-action bg-transparent text-white border-opacity-10" th:href="@{/orders/new}">
+                            <i class="bi bi-bag-check me-2"></i>Place a new order
+                        </a>
+                        <a class="list-group-item list-group-item-action bg-transparent text-white border-opacity-10" th:href="@{/purchases}">
+                            <i class="bi bi-receipt me-2"></i>Review purchase history
+                        </a>
+                        <a class="list-group-item list-group-item-action bg-transparent text-white border-opacity-10" th:href="@{/dashboard}">
+                            <i class="bi bi-speedometer2 me-2"></i>Open dashboard
+                        </a>
+                    </div>
+
+                    <div class="mt-3 small muted">
+                        <span th:if="${#authorization.expression('isAuthenticated()')}">
+                            You’re signed in — start managing your store.
+                        </span>
+                        <span th:unless="${#authorization.expression('isAuthenticated()')}">
+                            Log in to access inventory operations.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<footer class="py-4">
+    <div class="container small muted d-flex flex-wrap justify-content-between gap-2">
+        <div>© <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2026</span> PageVault</div>
+        <div>Built with Spring Boot, Thymeleaf, PostgreSQL</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+

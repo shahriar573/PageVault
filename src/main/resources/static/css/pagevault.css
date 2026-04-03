@@ -1,0 +1,78 @@
+/* PageVault UI theme overrides for improved contrast and readability.
+   Loaded on all Thymeleaf pages (via templates).
+*/
+
+:root {
+    --pv-bg: #0b1220;
+    --pv-surface: rgba(255, 255, 255, 0.10);
+    --pv-border: rgba(255, 255, 255, 0.18);
+    --pv-text: #f2f6ff;
+    --pv-muted: rgba(242, 246, 255, 0.78);
+}
+
+body {
+    color: var(--pv-text);
+    background-color: var(--pv-bg);
+}
+
+/* Surfaces */
+.glass,
+.card-glass {
+    background: var(--pv-surface) !important;
+    border-color: var(--pv-border) !important;
+}
+
+/* Muted text helpers */
+.muted,
+.text-muted-2 {
+    color: var(--pv-muted) !important;
+}
+
+/* Inputs */
+.form-control,
+.form-control:focus,
+.form-select,
+.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+    color: #ffffff !important;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.70) !important;
+}
+
+.input-group-text {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+/* Tables */
+.table {
+    color: var(--pv-text) !important;
+}
+
+.table td,
+.table th {
+    border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* List groups */
+.list-group-item {
+    color: var(--pv-text) !important;
+}
+
+/* Make outline buttons readable on dark background */
+.btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Links */
+a {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+a:hover {
+    color: #ffffff;
+}
+
