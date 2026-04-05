@@ -1,4 +1,12 @@
 -- Seed a richer in-stock catalog without duplicating records on restart.
+
+-- Seed an initial ADMIN account.
+-- Login: username = admin, password = Admin@1234
+-- Note: Spring Security requires BCrypt hashes, so the hash is stored below instead of the plain password.
+INSERT INTO users (username, email, password, role)
+SELECT 'admin', 'admin@pagevault.com', '$2a$10$a6IPMSqs3WPwagJeWb2p4eUnd7VcZPsUxJT.hMxsgDXh6mO6VIa2m', 'ADMIN'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
+
 INSERT INTO books (title, author, price, stock_quantity)
 SELECT 'Clean Code', 'Robert C. Martin', 31.99, 18
 WHERE NOT EXISTS (SELECT 1 FROM books WHERE title = 'Clean Code' AND author = 'Robert C. Martin');
